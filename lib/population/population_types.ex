@@ -1,6 +1,8 @@
 defmodule Population.Types do
 
   @type countries :: [String.t]
+  @type country_response :: {:ok, countries} | failure
+
   @type gender :: :male | :female | :unisex
 
   @type year   :: pos_integer

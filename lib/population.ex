@@ -7,6 +7,7 @@ defmodule Population do
     children = [
       worker(Population.Country, [[]]),
       worker(Population.Rank, [%{}]),
+      worker(Population.LifeExpectancy, [%{}]),
     ]
 
     options = [strategy: :one_for_one, name: Population.Supervisor]

@@ -3,9 +3,10 @@ defmodule Population.API do
   @api_url Application.get_env(:population, :api_url)
 
   @typep implicit_response :: Population.Types.implicit_response
+  @typep explicit_response :: Population.Types.explicit_response
   @typep request_response  :: {:ok, Response.t | AsyncResponse.t} | {:error, Error.t}
 
-  @spec fetch_data(String.t) :: Population.Types.implicit_response
+  @spec fetch_data(String.t) :: implicit_response
   def fetch_data(path) do
     path
     |> url_for
@@ -29,5 +30,25 @@ defmodule Population.API do
   end
   defp handle_response({:error, %HTTPoison.Error{reason: reason}}) do
     {:error, to_string(reason)}
+  end
+
+  @spec handle_reply(implicit_response, Mat.t) :: implicit_response
+  def handle_reply(expr, state) do
+    case expr do
+      {:ok, resp} = success ->
+        {:reply, success, resp}
+      failure ->
+        {:reply, failure, state}
+    end
+  end
+
+  @spec handle_reply!(implicit_response) :: explicit_response
+  def handle_reply!(expr) do
+    case expr do
+      {:ok, resp}  ->
+        {:reply, resp, resp}
+      {:error, reason} ->
+        raise reason
+    end
   end
 end

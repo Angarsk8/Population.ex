@@ -2,8 +2,13 @@ defmodule Population.Rank do
 
   use GenServer
 
-  import Population.API
-  import Population.Helpers.DateFormat
+  import Population.API,
+    only: [fetch_data: 1, handle_reply: 2, handle_reply!: 1]
+
+  import Population.Helpers.DateFormat,
+    only: [format_date: 1, format_date_offset: 1]
+
+  import Population.Helpers.URIFormat, only: [encode_country: 1]
 
   @typep gender :: Population.Types.gender
   @typep date   :: Population.Types.date
@@ -65,7 +70,17 @@ defmodule Population.Rank do
 
   @spec in_future!(date, gender, String.t, offset) :: explicit_response
   def in_future!(dob, gender, country, future_date) do
-    GenServer.call(__MODULE__, {:get_rank_in_future!, dob, gender, country, future_date, :fail})
+    GenServer.call(__MODULE__, {:get_rank_in_future!, dob, gender, country, future_date})
+  end
+
+  @spec date_by_rank(date, gender, String.t, integer) :: implicit_response
+  def date_by_rank(dob, gender, country, rank) do
+    GenServer.call(__MODULE__, {:get_date_by_rank, dob, gender, country, rank})
+  end
+
+  @spec date_by_rank!(date, gender, String.t, integer) :: explicit_response
+  def date_by_rank!(dob, gender, country, rank) do
+    GenServer.call(__MODULE__, {:get_date_by_rank!, dob, gender, country, rank})
   end
 
   # GenServer CallBacks
@@ -120,51 +135,46 @@ defmodule Population.Rank do
     |> fetch_data
     |> handle_reply!
   end
+  def handle_call({:get_date_by_rank, dob, gender, country, rank}, _from, state) do
+    url_path_for_date_by_rank(dob, gender, country, rank)
+    |> fetch_data
+    |> handle_reply(state)
+  end
+  def handle_call({:get_date_by_rank!, dob, gender, country, rank}, _from, _state) do
+    url_path_for_date_by_rank(dob, gender, country, rank)
+    |> fetch_data
+    |> handle_reply!
+  end
 
   # Helper Functions
 
-  @callback handle_reply(response) :: implicit_response
-  defp handle_reply(expr, state) do
-    case expr do
-      {:ok, resp} = success ->
-        {:reply, success, resp}
-      failure ->
-        {:reply, failure, state}
-    end
-  end
-
-  @callback handle_reply!(response) :: explicit_response
-  defp handle_reply!(expr) do
-    case expr do
-      {:ok, resp}  ->
-        {:reply, resp, resp}
-      {:error, reason} ->
-        raise reason
-    end
-  end
-
   @spec url_path_for_today(date, gender, String.t) :: String.t
   defp url_path_for_today(dob, gender, country) do
-    "wp-rank/#{format_date(dob)}/#{gender}/#{URI.encode(country)}/today/"
+    "wp-rank/#{format_date(dob)}/#{gender}/#{encode_country(country)}/today/"
   end
 
   @spec url_path_by_date(date, gender, String.t, date) :: String.t
   defp url_path_by_date(dob, gender, country, date) do
-    "wp-rank/#{format_date(dob)}/#{gender}/#{URI.encode(country)}/on/#{format_date(date)}/"
+    "wp-rank/#{format_date(dob)}/#{gender}/#{encode_country(country)}/on/#{format_date(date)}/"
   end
 
   @spec url_path_by_age(date, gender, String.t, offset) :: String.t
   defp url_path_by_age(dob, gender, country, age) do
-    "wp-rank/#{format_date(dob)}/#{gender}/#{URI.encode(country)}/aged/#{format_date_offset(age)}/"
+    "wp-rank/#{format_date(dob)}/#{gender}/#{encode_country(country)}/aged/#{format_date_offset(age)}/"
   end
 
   @spec url_path_in_past(date, gender, String.t, offset) :: String.t
   defp url_path_in_past(dob, gender, country, ago) do
-    "wp-rank/#{format_date(dob)}/#{gender}/#{URI.encode(country)}/ago/#{format_date_offset(ago)}/"
+    "wp-rank/#{format_date(dob)}/#{gender}/#{encode_country(country)}/ago/#{format_date_offset(ago)}/"
   end
 
   @spec url_path_in_future(date, gender, String.t, offset) :: String.t
   defp url_path_in_future(dob, gender, country, future) do
-    "wp-rank/#{format_date(dob)}/#{gender}/#{URI.encode(country)}/in/#{format_date_offset(future)}/"
+    "wp-rank/#{format_date(dob)}/#{gender}/#{encode_country(country)}/in/#{format_date_offset(future)}/"
+  end
+
+  @spec url_path_for_date_by_rank(date, gender, String.t, integer) :: String.t
+  defp url_path_for_date_by_rank(dob, gender, country, rank) do
+    "wp-rank/#{format_date(dob)}/#{gender}/#{encode_country(country)}/ranked/#{rank}/"
   end
 end
