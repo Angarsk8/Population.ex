@@ -10,9 +10,10 @@ defmodule Population.LifeExpectancy do
 
   import Population.Helpers.URIFormat, only: [encode_country: 1]
 
-  @typep gender :: Population.Types.gender
-  @typep date   :: Population.Types.date
-  @typep offset :: Population.Types.offset
+  @typep country :: Population.Types.country
+  @typep gender  :: Population.Types.gender
+  @typep date    :: Population.Types.date
+  @typep offset  :: Population.Types.offset
 
   @typep implicit_response :: Population.Types.implicit_response
   @typep explicit_response :: Population.Types.explicit_response
@@ -23,22 +24,22 @@ defmodule Population.LifeExpectancy do
     GenServer.start_link(__MODULE__, opts, name: __MODULE__)
   end
 
-  @spec remaining(gender, String.t, date, offset) :: implicit_response
+  @spec remaining(gender, country, date, offset) :: implicit_response
   def remaining(gender, country, date, age) do
     GenServer.call(__MODULE__, {:get_remaining, gender, country, date, age})
   end
 
-  @spec remaining!(gender, String.t, date, offset) :: explicit_response
+  @spec remaining!(gender, country, date, offset) :: explicit_response
   def remaining!(gender, country, date, age) do
     GenServer.call(__MODULE__, {:get_remaining!, gender, country, date, age})
   end
 
-  @spec total(gender, String.t, date) :: implicit_response
+  @spec total(gender, country, date) :: implicit_response
   def total(gender, country, dob) do
     GenServer.call(__MODULE__, {:get_total, gender, country, dob})
   end
 
-  @spec total!(gender, String.t, date) :: explicit_response
+  @spec total!(gender, country, date) :: explicit_response
   def total!(gender, country, dob) do
     GenServer.call(__MODULE__, {:get_total!, gender, country, dob})
   end
@@ -68,12 +69,12 @@ defmodule Population.LifeExpectancy do
 
   # Helper Functions
 
-  @spec url_path_for_remaining(gender, String.t, date, offset) :: String.t
+  @spec url_path_for_remaining(gender, country, date, offset) :: String.t
   defp url_path_for_remaining(gender, country, date, age) do
     "life-expectancy/remaining/#{gender}/#{encode_country(country)}/#{format_date(date)}/#{format_date_offset(age)}/"
   end
 
-  @spec url_path_for_total(gender, String.t, date) :: String.t
+  @spec url_path_for_total(gender, country, date) :: String.t
   defp url_path_for_total(gender, country, dob) do
     "life-expectancy/total/#{gender}/#{encode_country(country)}/#{format_date(dob)}/"
   end

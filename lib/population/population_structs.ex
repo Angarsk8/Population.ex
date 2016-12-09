@@ -1,43 +1,59 @@
 defmodule WorldPopulationRankToday do
-  defstruct dob: "", gender: "", country: "", rank: 0
+  @fields [:dob, :gender, :country, :rank]
+  @enforce_keys @fields
+  defstruct @fields
 end
 
 defmodule WorldPopulationRankByDate do
-  defstruct dob: "", gender: "", country: "", rank: 0, date: ""
+  @fields [:dob, :gender, :country, :rank, :date]
+  @enforce_keys @fields
+  defstruct @fields
 end
 
 defmodule WorldPopulationRankByAge do
-  defstruct dob: "", gender: "", country: "", rank: 0, age: ""
+  @fields [:dob, :gender, :country, :rank, :age]
+  @enforce_keys @fields
+  defstruct @fields
 end
 
 defmodule WorldPopulationRankWithOffset do
-  defstruct dob: "", gender: "", country: "", rank: 0, offset: ""
+  @fields [:dob, :gender, :country, :rank, :offset]
+  @enforce_keys @fields
+  defstruct @fields
 end
 
 defmodule DateByWorldPopulationRank do
-  defstruct dob: "", gender: "", country: "", rank: 0, date_on_rank: ""
+  @fields [:dob, :gender, :country, :rank, :date_on_rank]
+  @enforce_keys @fields
+  defstruct @fields
 end
 
 defmodule RemaininLifeExpectancy do
-  defstruct gender: "", country: "", date: "", age: "", remainig_life_expectancy: 0.0
+  @fields [:gender, :country, :date, :age, :remainig_life_expectancy]
+  @enforce_keys @fields
+  defstruct @fields
 end
 
 defmodule TotalLifeExpectancy do
-  defstruct gender: "", country: "", dob: "", total_life_expectancy: 0.0
+  @fields [:gender, :country, :dob, :total_life_expectancy]
+  @enforce_keys @fields
+  defstruct @fields
 end
 
 defmodule PopulationTable do
-  defstruct total: 0, females: 0, males: 0, year: 0, age: 0
+  @fields [:total, :females, :males, :year, :age]
+  @enforce_keys @fields
+  defstruct @fields
 end
 
 defmodule TotalPopulation do
-  defstruct date: "", opulation: 0
-end
-
-defmodule TotalPopulation do
-  defstruct date: "", opulation: 0
+  @fields [:date, :population]
+  @enforce_keys @fields
+  defstruct @fields
 end
 
 defmodule MortalityDistribution do
-  defstruct age: 0, mortality_precent: 0.0
+  @fields [:age, :mortality_precent]
+  @enforce_keys @fields
+  defstruct @fields
 end

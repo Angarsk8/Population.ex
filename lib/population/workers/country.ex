@@ -5,9 +5,8 @@ defmodule Population.Country do
   import Population.API,
     only: [fetch_data: 1, handle_reply: 2, handle_reply!: 1]
 
-  @typep countries :: Population.Types.countries
-  @typep country_response  :: Population.Types.country_response
   @typep implicit_response :: Population.Types.implicit_response
+  @typep explicit_response :: Population.Types.explicit_response
 
   # Client API
 
@@ -15,16 +14,21 @@ defmodule Population.Country do
     GenServer.start_link(__MODULE__, opts, name: __MODULE__)
   end
 
-  @spec list() :: country_response
+  @spec list() :: implicit_response
   def list do
-    GenServer.call(__MODULE__, :get_countries)
-    |> handle_result
+    result = GenServer.call(__MODULE__, :get_countries)
+    case result do
+      {:ok, %{"countries" => countries}} ->
+        {:ok, countries}
+      _ ->
+      result
+    end
   end
 
-  @spec list!() :: countries | no_return
+  @spec list!() :: explicit_response
   def list! do
-    GenServer.call(__MODULE__, :get_countries!)
-    |> handle_result!
+    %{"countries" => countries} = GenServer.call(__MODULE__, :get_countries!)
+    countries
   end
 
   # GenServer CallBacks
@@ -37,13 +41,4 @@ defmodule Population.Country do
     fetch_data("countries")
     |> handle_reply!
   end
-
-  # Helper Functions
-
-  @spec handle_result(implicit_response) :: country_response
-  defp handle_result({:ok, resp}), do: {:ok, resp["countries"]}
-  defp handle_result(failure = {:error, _reason}), do: failure
-
-  @spec handle_result(Map.t) :: countries
-  defp handle_result!(resp) when is_map(resp), do: resp["countries"]
 end

@@ -1,19 +1,27 @@
 defmodule Population.Types do
 
-  @type countries :: [String.t]
-  @type country_response :: {:ok, countries} | failure
+  @type country   :: String.t
+  @type countries :: [country]
 
   @type gender :: :male | :female | :unisex
-
   @type year   :: pos_integer
+  @type age    :: integer
   @type month  :: 1..12
   @type day    :: 1..31
   @type date   :: {year, month, day}
   @type offset :: {year} | {year, month} | {year, month, day}
 
-  @type success  :: {:ok, Map.t}
+  @type population_table    :: [Map.t]
+  @type population_contrast :: {Map.t, Map.t}
+
+  @type response :: countries
+                  | population_table
+                  | population_contrast
+                  | Map.t
+
+  @type success  :: {:ok, response}
   @type failure  :: {:error, String.t}
 
-  @type implicit_response :: success | failure
-  @type explicit_response :: Map.t | no_return
+  @type implicit_response :: success  | failure
+  @type explicit_response :: response | no_return
 end
