@@ -1,10 +1,8 @@
 defmodule Population.API do
 
-  @api_url Application.get_env(:population, :api_url)
+  use Population.Types
 
-  @typep implicit_response :: Population.Types.implicit_response
-  @typep explicit_response :: Population.Types.explicit_response
-  @typep request_response  :: {:ok, Response.t | AsyncResponse.t} | {:error, Error.t}
+  @api_url Application.get_env(:population, :api_url)
 
   @spec fetch_data(String.t) :: implicit_response
   def fetch_data(path) do

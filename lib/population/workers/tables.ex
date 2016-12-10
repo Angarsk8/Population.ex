@@ -1,20 +1,13 @@
 defmodule Population.Table do
 
   use GenServer
+  use Population.Types
 
   import Population.API,
     only: [fetch_data: 1, handle_reply: 2, handle_reply!: 1]
 
   import Population.Helpers.DateFormat, only: [format_date: 1]
   import Population.Helpers.URIFormat , only: [encode_country: 1]
-
-  @typep country :: Population.Types.country
-  @typep year    :: Population.Types.year
-  @typep age     :: Population.Types.age
-  @typep date    :: Population.Types.date
-
-  @typep implicit_response :: Population.Types.implicit_response
-  @typep explicit_response :: Population.Types.explicit_response
 
   # Client API
 

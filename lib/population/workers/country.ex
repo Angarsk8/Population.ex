@@ -1,12 +1,10 @@
 defmodule Population.Country do
 
   use GenServer
+  use Population.Types
 
   import Population.API,
     only: [fetch_data: 1, handle_reply: 2, handle_reply!: 1]
-
-  @typep implicit_response :: Population.Types.implicit_response
-  @typep explicit_response :: Population.Types.explicit_response
 
   # Client API
 

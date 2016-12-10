@@ -1,6 +1,7 @@
 defmodule Population.LifeExpectancy do
 
   use GenServer
+  use Population.Types
 
   import Population.API,
     only: [fetch_data: 1, handle_reply: 2, handle_reply!: 1]
@@ -9,14 +10,6 @@ defmodule Population.LifeExpectancy do
     only: [format_date: 1, format_date_offset: 1]
 
   import Population.Helpers.URIFormat, only: [encode_country: 1]
-
-  @typep country :: Population.Types.country
-  @typep gender  :: Population.Types.gender
-  @typep date    :: Population.Types.date
-  @typep offset  :: Population.Types.offset
-
-  @typep implicit_response :: Population.Types.implicit_response
-  @typep explicit_response :: Population.Types.explicit_response
 
   # Client API
 
