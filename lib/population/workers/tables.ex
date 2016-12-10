@@ -6,7 +6,6 @@ defmodule Population.Table do
   import Population.API,
     only: [fetch_data: 1, handle_reply: 2, handle_reply!: 1]
 
-  import Population.Helpers.DateFormat, only: [format_date: 1]
   import Population.Helpers.URIFormat , only: [encode_country: 1]
 
   # Client API
@@ -66,7 +65,7 @@ defmodule Population.Table do
   def for_country_by_date(country, date) do
     result = GenServer.call(__MODULE__, {:get_table_for_country_by_date, country, date})
     case result do
-      {:ok, %{ "total_population" => total}} ->
+      {:ok, %{ total_population: total}} ->
         {:ok, total}
       _ ->
         result
@@ -75,7 +74,7 @@ defmodule Population.Table do
 
   @spec for_country_by_date!(country, date) :: population_table | no_return
   def for_country_by_date!(country, date) do
-    %{"total_population" => total} = GenServer.call(__MODULE__, {:get_table_for_country_by_date!, country, date})
+    %{total_population: total} = GenServer.call(__MODULE__, {:get_table_for_country_by_date!, country, date})
     total
   end
 
@@ -83,7 +82,7 @@ defmodule Population.Table do
   def for_today_and_tomorrow_by_country(country) do
     result = GenServer.call(__MODULE__, {:get_table_for_today_and_tomorrow_by_country, country})
     case result do
-      {:ok, %{"total_population" => [today, tomorrow | _]}} ->
+      {:ok, %{total_population: [today, tomorrow | _]}} ->
         {:ok, %{today: today, tomorrow: tomorrow}}
       _ ->
       result
@@ -92,7 +91,7 @@ defmodule Population.Table do
 
   @spec for_today_and_tomorrow_by_country!(country) ::  population_contrast | no_return
   def for_today_and_tomorrow_by_country!(country) do
-    %{"total_population" => [today, tomorrow | _]} = GenServer.call(__MODULE__, {:get_table_for_today_and_tomorrow_by_country!, country})
+    %{total_population: [today, tomorrow | _]} = GenServer.call(__MODULE__, {:get_table_for_today_and_tomorrow_by_country!, country})
     %{today: today, tomorrow: tomorrow}
   end
 
@@ -183,7 +182,7 @@ defmodule Population.Table do
 
   @spec url_path_for_country_by_date(country, date) :: String.t
   defp url_path_for_country_by_date(country, date) do
-    "population/#{encode_country(country)}/#{format_date(date)}/"
+    "population/#{encode_country(country)}/#{Date.to_string(date)}/"
   end
 
   @spec url_path_for_today_and_tomorrow_by_country(country) :: String.t

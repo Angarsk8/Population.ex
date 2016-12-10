@@ -28,6 +28,9 @@ defmodule Population.API do
   defp handle_response({:ok, %HTTPoison.Response{status_code: _, body: body}}) do
     json = JSON.decode!(body)
     {:error, json["detail"]}
+  rescue
+    _ ->
+      {:error, "An error ocurred while retrieveing the information"}
   end
   defp handle_response({:error, %HTTPoison.Error{reason: reason}}) do
     {:error, to_string(reason)}
@@ -69,7 +72,29 @@ end
 # Population.Country.list
 # Population.Country.list!
 # Population.LifeExpectancy.remaining(:male, "colombia", ~D[1992-06-21], {18, 2})
-# Population.LifeExpectancy.remaining!(:female, "ecuador", ~D[1992-06-21], {18, 2})
-# Population.LifeExpectancy.total(:female, "ecuador", ~D[1992-06-21])
-# Population.LifeExpectancy.total!(:female, "ecuador", ~D[1992-06-21])
+# Population.LifeExpectancy.remaining!(:female, "colombia", ~D[1992-06-21], {18, 2})
+# Population.LifeExpectancy.total(:female, "colombia", ~D[1992-06-21])
+# Population.LifeExpectancy.total!(:female, "colombia", ~D[1992-06-21])
 # Population.Mortality.distribution!("Colombia", :male, {18, 2})
+# Population.Table.all(1992, 18)
+# Population.Table.all!(1992, 18)
+# Population.Table.all_ages_by_country("colombia", 2012)
+# Population.Table.all_ages_by_country!("colombia", 2012)
+# Population.Table.all_years_by_country("colombia", 18)
+# Population.Table.all_years_by_country!("colombia", 18)
+# Population.Table.by_country("colombia", 2001, 18)
+# Population.Table.by_country!("colombia", 2001, 18)
+# Population.Table.for_country_by_date("colombia", ~D[2015-06-21])
+# Population.Table.for_country_by_date!("colombia", ~D[2015-06-21])
+# Population.Table.for_today_and_tomorrow_by_country("colombia")
+# Population.Table.for_today_and_tomorrow_by_country!("colombia")
+# Population.Rank.by_age(~D[1992-06-21] , :male, "Colombia", {24, 5})
+# Population.Rank.by_age!(~D[1992-06-21], :male, "Colombia", {24, 5})
+# Population.Rank.by_date(~D[1992-06-21], :male, "Colombia", ~D[2016-12-12])
+# Population.Rank.by_date!(~D[1992-06-21], :male, "Colombia", ~D[2016-12-12])
+# Population.Rank.date_by_rank(~D[1992-06-21], :male, "Colombia", 10000000)
+# Population.Rank.date_by_rank!(~D[1992-06-21], :male, "Colombia", 10000000)
+# Population.Rank.in_future(~D[1992-06-21], :male, "Colombia", {2, 5})
+# Population.Rank.in_future!(~D[1992-06-21], :male, "Colombia", {2, 5})
+# Population.Rank.in_past(~D[1992-06-21], :male, "Colombia", {2, 5})
+# Population.Rank.in_past!(~D[1992-06-21], :male, "Colombia", {2, 5})
