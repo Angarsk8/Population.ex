@@ -6,10 +6,8 @@ defmodule Population.Rank do
   import Population.API,
     only: [fetch_data: 1, handle_reply: 2, handle_reply!: 1]
 
-  import Population.Helpers.DateFormat,
-    only: [format_date: 1, format_date_offset: 1]
-
-  import Population.Helpers.URIFormat, only: [encode_country: 1]
+  import Population.Helpers.DateFormat, only: [format_date_offset: 1]
+  import Population.Helpers.URIFormat , only: [encode_country: 1]
 
   # Client API
 
@@ -17,62 +15,62 @@ defmodule Population.Rank do
     GenServer.start_link(__MODULE__, opts, name: __MODULE__)
   end
 
-  @spec today(date, gender, country) :: implicit_response
+  @spec today(date, gender, country) :: {:ok, rank_today} | failure
   def today(dob, gender, country) do
     GenServer.call(__MODULE__, {:get_rank_today, dob, gender, country})
   end
 
-  @spec today!(date, gender, country) :: explicit_response
+  @spec today!(date, gender, country) :: rank_today | no_return
   def today!(dob, gender, country) do
     GenServer.call(__MODULE__, {:get_rank_today!, dob, gender, country})
   end
 
-  @spec by_date(date, gender, country, date) :: implicit_response
+  @spec by_date(date, gender, country, date) :: {:ok, rank_by_date} | failure
   def by_date(dob, gender, country, date) do
     GenServer.call(__MODULE__, {:get_rank_by_date, dob, gender, country, date})
   end
 
-  @spec by_date!(date, gender, country, date) :: explicit_response
+  @spec by_date!(date, gender, country, date) :: rank_by_date | no_return
   def by_date!(dob, gender, country, date) do
     GenServer.call(__MODULE__, {:get_rank_by_date!, dob, gender, country, date})
   end
 
-  @spec by_age(date, gender, country, offset) :: implicit_response
+  @spec by_age(date, gender, country, offset) :: {:ok, rank_by_age} | failure
   def by_age(dob, gender, country, age) do
     GenServer.call(__MODULE__, {:get_rank_by_age, dob, gender, country, age})
   end
 
-  @spec by_age!(date, gender, country, offset) :: explicit_response
+  @spec by_age!(date, gender, country, offset) :: rank_by_age | no_return
   def by_age!(dob, gender, country, age) do
     GenServer.call(__MODULE__, {:get_rank_by_age!, dob, gender, country, age})
   end
 
-  @spec in_past(date, gender, country, offset) :: implicit_response
+  @spec in_past(date, gender, country, offset) :: {:ok, rank_with_offset} | failure
   def in_past(dob, gender, country, ago) do
     GenServer.call(__MODULE__, {:get_rank_in_past, dob, gender, country, ago})
   end
 
-  @spec in_past!(date, gender, country, offset) :: explicit_response
+  @spec in_past!(date, gender, country, offset) :: rank_with_offset | no_return
   def in_past!(dob, gender, country, ago) do
     GenServer.call(__MODULE__, {:get_rank_in_past!, dob, gender, country, ago})
   end
 
-  @spec in_future(date, gender, country, offset) :: implicit_response
+  @spec in_future(date, gender, country, offset) :: {:ok, rank_with_offset} | failure
   def in_future(dob, gender, country, future_date) do
     GenServer.call(__MODULE__, {:get_rank_in_future, dob, gender, country, future_date})
   end
 
-  @spec in_future!(date, gender, country, offset) :: explicit_response
+  @spec in_future!(date, gender, country, offset) :: rank_with_offset | no_return
   def in_future!(dob, gender, country, future_date) do
     GenServer.call(__MODULE__, {:get_rank_in_future!, dob, gender, country, future_date})
   end
 
-  @spec date_by_rank(date, gender, country, integer) :: implicit_response
+  @spec date_by_rank(date, gender, country, integer) :: {:ok, date_by_rank} | failure
   def date_by_rank(dob, gender, country, rank) do
     GenServer.call(__MODULE__, {:get_date_by_rank, dob, gender, country, rank})
   end
 
-  @spec date_by_rank!(date, gender, country, integer) :: explicit_response
+  @spec date_by_rank!(date, gender, country, integer) :: date_by_rank | no_return
   def date_by_rank!(dob, gender, country, rank) do
     GenServer.call(__MODULE__, {:get_date_by_rank!, dob, gender, country, rank})
   end
@@ -144,31 +142,31 @@ defmodule Population.Rank do
 
   @spec url_path_for_today(date, gender, country) :: String.t
   defp url_path_for_today(dob, gender, country) do
-    "wp-rank/#{format_date(dob)}/#{gender}/#{encode_country(country)}/today/"
+    "wp-rank/#{Date.to_string(dob)}/#{gender}/#{encode_country(country)}/today/"
   end
 
   @spec url_path_by_date(date, gender, country, date) :: String.t
   defp url_path_by_date(dob, gender, country, date) do
-    "wp-rank/#{format_date(dob)}/#{gender}/#{encode_country(country)}/on/#{format_date(date)}/"
+    "wp-rank/#{Date.to_string(dob)}/#{gender}/#{encode_country(country)}/on/#{Date.to_string(date)}/"
   end
 
   @spec url_path_by_age(date, gender, country, offset) :: String.t
   defp url_path_by_age(dob, gender, country, age) do
-    "wp-rank/#{format_date(dob)}/#{gender}/#{encode_country(country)}/aged/#{format_date_offset(age)}/"
+    "wp-rank/#{Date.to_string(dob)}/#{gender}/#{encode_country(country)}/aged/#{format_date_offset(age)}/"
   end
 
   @spec url_path_in_past(date, gender, country, offset) :: String.t
   defp url_path_in_past(dob, gender, country, ago) do
-    "wp-rank/#{format_date(dob)}/#{gender}/#{encode_country(country)}/ago/#{format_date_offset(ago)}/"
+    "wp-rank/#{Date.to_string(dob)}/#{gender}/#{encode_country(country)}/ago/#{format_date_offset(ago)}/"
   end
 
   @spec url_path_in_future(date, gender, country, offset) :: String.t
   defp url_path_in_future(dob, gender, country, future) do
-    "wp-rank/#{format_date(dob)}/#{gender}/#{encode_country(country)}/in/#{format_date_offset(future)}/"
+    "wp-rank/#{Date.to_string(dob)}/#{gender}/#{encode_country(country)}/in/#{format_date_offset(future)}/"
   end
 
   @spec url_path_for_date_by_rank(date, gender, country, integer) :: String.t
   defp url_path_for_date_by_rank(dob, gender, country, rank) do
-    "wp-rank/#{format_date(dob)}/#{gender}/#{encode_country(country)}/ranked/#{rank}/"
+    "wp-rank/#{Date.to_string(dob)}/#{gender}/#{encode_country(country)}/ranked/#{rank}/"
   end
 end

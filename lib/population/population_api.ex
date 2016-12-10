@@ -4,6 +4,9 @@ defmodule Population.API do
 
   @api_url Application.get_env(:population, :api_url)
 
+  @type request_response  :: {:ok, Response.t | AsyncResponse.t}
+                           | {:error, Error.t}
+
   @spec fetch_data(String.t) :: implicit_response
   def fetch_data(path) do
     path
@@ -30,11 +33,11 @@ defmodule Population.API do
     {:error, to_string(reason)}
   end
 
-  @spec handle_reply(implicit_response, Mat.t) :: implicit_response
+  @spec handle_reply(implicit_response, map | [String.t | map]) :: implicit_response
   def handle_reply(expr, state) do
     case expr do
-      {:ok, resp} = success ->
-        {:reply, success, resp}
+      {:ok, resp} ->
+        {:reply, {:ok, atomize_keys(resp)}, atomize_keys(resp)}
       failure ->
         {:reply, failure, state}
     end
@@ -44,9 +47,29 @@ defmodule Population.API do
   def handle_reply!(expr) do
     case expr do
       {:ok, resp}  ->
-        {:reply, resp, resp}
+        {:reply, atomize_keys(resp), atomize_keys(resp)}
       {:error, reason} ->
         raise reason
     end
   end
+
+  defp atomize_keys(response) when is_list(response) do
+    for el <- response do
+      atomize_keys(el)
+    end
+  end
+  defp atomize_keys(response) when is_map(response) do
+    for {key, val} <- response, into: %{} do
+      {String.to_atom(key), atomize_keys(val)}
+    end
+  end
+  defp atomize_keys(response), do: response
 end
+
+# Population.Country.list
+# Population.Country.list!
+# Population.LifeExpectancy.remaining(:male, "colombia", ~D[1992-06-21], {18, 2})
+# Population.LifeExpectancy.remaining!(:female, "ecuador", ~D[1992-06-21], {18, 2})
+# Population.LifeExpectancy.total(:female, "ecuador", ~D[1992-06-21])
+# Population.LifeExpectancy.total!(:female, "ecuador", ~D[1992-06-21])
+# Population.Mortality.distribution!("Colombia", :male, {18, 2})

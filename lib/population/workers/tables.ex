@@ -15,17 +15,17 @@ defmodule Population.Table do
     GenServer.start_link(__MODULE__, opts, name: __MODULE__)
   end
 
-  @spec all(year, age) :: implicit_response
+  @spec all(year, age) :: {:ok, population_tables} | failure
   def all(year, age) do
     GenServer.call(__MODULE__, {:get_all_tables, year, age})
   end
 
-  @spec all!(year, age) :: explicit_response
+  @spec all!(year, age) :: population_tables | no_return
   def all!(year, age) do
     GenServer.call(__MODULE__, {:get_all_tables!, year, age})
   end
 
-  @spec by_country(country, year, age) :: implicit_response
+  @spec by_country(country, year, age) :: {:ok, population_table} | failure
   def by_country(country, year, age) do
     result = GenServer.call(__MODULE__, {:get_table_by_country, country, year, age})
     case result do
@@ -36,33 +36,33 @@ defmodule Population.Table do
     end
   end
 
-  @spec by_country!(country, year, age) :: explicit_response
+  @spec by_country!(country, year, age) :: population_table | no_return
   def by_country!(country, year, age) do
     [table | _] = GenServer.call(__MODULE__, {:get_table_by_country!, country, year, age})
     table
   end
 
-  @spec all_ages_by_country(country, year) :: implicit_response
+  @spec all_ages_by_country(country, year) :: {:ok, population_tables} | failure
   def all_ages_by_country(country, year) do
     GenServer.call(__MODULE__, {:get_tables_for_all_ages_by_country, country, year})
   end
 
-  @spec all_ages_by_country!(country, year) :: explicit_response
+  @spec all_ages_by_country!(country, year) :: population_tables | no_return
   def all_ages_by_country!(country, year) do
     GenServer.call(__MODULE__, {:get_tables_for_all_ages_by_country!, country, year})
   end
 
-  @spec all_years_by_country(country, age) :: implicit_response
+  @spec all_years_by_country(country, age) :: {:ok, population_tables} | failure
   def all_years_by_country(country, age) do
     GenServer.call(__MODULE__, {:get_tables_for_all_years_by_country, country, age})
   end
 
-  @spec all_years_by_country!(country, age) :: explicit_response
+  @spec all_years_by_country!(country, age) :: population_tables | no_return
   def all_years_by_country!(country, age) do
     GenServer.call(__MODULE__, {:get_tables_for_all_years_by_country!, country, age})
   end
 
-  @spec for_country_by_date(country, date) :: implicit_response
+  @spec for_country_by_date(country, date) :: {:ok, population_table} | failure
   def for_country_by_date(country, date) do
     result = GenServer.call(__MODULE__, {:get_table_for_country_by_date, country, date})
     case result do
@@ -73,27 +73,27 @@ defmodule Population.Table do
     end
   end
 
-  @spec for_country_by_date!(country, date) :: explicit_response
+  @spec for_country_by_date!(country, date) :: population_table | no_return
   def for_country_by_date!(country, date) do
     %{"total_population" => total} = GenServer.call(__MODULE__, {:get_table_for_country_by_date!, country, date})
     total
   end
 
-  @spec for_today_and_tomorrow_by_country(country) :: implicit_response
+  @spec for_today_and_tomorrow_by_country(country) :: {:ok, population_contrast} | failure
   def for_today_and_tomorrow_by_country(country) do
     result = GenServer.call(__MODULE__, {:get_table_for_today_and_tomorrow_by_country, country})
     case result do
       {:ok, %{"total_population" => [today, tomorrow | _]}} ->
-        {:ok, {today, tomorrow}}
+        {:ok, %{today: today, tomorrow: tomorrow}}
       _ ->
       result
     end
   end
 
-  @spec for_today_and_tomorrow_by_country!(country) :: explicit_response
+  @spec for_today_and_tomorrow_by_country!(country) ::  population_contrast | no_return
   def for_today_and_tomorrow_by_country!(country) do
     %{"total_population" => [today, tomorrow | _]} = GenServer.call(__MODULE__, {:get_table_for_today_and_tomorrow_by_country!, country})
-    {today, tomorrow}
+    %{today: today, tomorrow: tomorrow}
   end
 
   # GenServer CallBacks

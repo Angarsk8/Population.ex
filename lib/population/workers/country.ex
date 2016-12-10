@@ -12,20 +12,20 @@ defmodule Population.Country do
     GenServer.start_link(__MODULE__, opts, name: __MODULE__)
   end
 
-  @spec list() :: implicit_response
+  @spec list() :: {:ok, countries} | failure
   def list do
     result = GenServer.call(__MODULE__, :get_countries)
     case result do
-      {:ok, %{"countries" => countries}} ->
+      {:ok, %{countries: countries}} ->
         {:ok, countries}
       _ ->
       result
     end
   end
 
-  @spec list!() :: explicit_response
+  @spec list!() :: countries | no_return
   def list! do
-    %{"countries" => countries} = GenServer.call(__MODULE__, :get_countries!)
+    %{countries: countries} = GenServer.call(__MODULE__, :get_countries!)
     countries
   end
 
