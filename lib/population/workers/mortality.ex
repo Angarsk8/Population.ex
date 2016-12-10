@@ -26,9 +26,9 @@ defmodule Population.Mortality do
     end
   end
 
-  @spec distribution(country, gender, offset) :: mortality_dist | no_return
+  @spec distribution!(country, gender, offset) :: mortality_dist | no_return
   def distribution!(country, gender, age) do
-    %{mortality_distribution: distribution} = 
+    %{mortality_distribution: distribution} =
       GenServer.call(__MODULE__, {:get_mortality_distribution!, country, gender, age})
     distribution
   end

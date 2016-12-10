@@ -2,13 +2,17 @@ defmodule Population.Types do
 
   defmacro __using__(_opts) do
     quote do
-      @type gender :: :male | :female | :unisex
+      @type gender :: :male | :female
       @type year   :: pos_integer
       @type age    :: integer
       @type month  :: 1..12
       @type day    :: 1..31
       @type date   :: Date.t
-      @type offset :: {year} | {year, month} | {year, month, day}
+      @type offset :: {year, month, day}
+                    | {year, month}
+                    | {year}
+
+      @type wgender :: gender | :unisex
 
       @type response :: remaining_life
                       | total_life
@@ -20,7 +24,6 @@ defmodule Population.Types do
       @type failure  :: {:error, String.t}
 
       @type implicit_response :: success  | failure
-      @type explicit_response :: response | no_return
 
       # Country Types
 
@@ -56,14 +59,14 @@ defmodule Population.Types do
 
       @type rank_today :: %{
         dob: String.t,
-        sex: gender,
+        sex: wgender,
         country: country,
         rank: integer
       }
 
       @type rank_by_date :: %{
         dob: String.t,
-        sex: gender,
+        sex: wgender,
         country: country,
         rank: integer,
         date: String.t
@@ -71,7 +74,7 @@ defmodule Population.Types do
 
       @type rank_by_age :: %{
         dob: String.t,
-        sex: gender,
+        sex: wgender,
         country: country,
         rank: integer,
         age: String.t
@@ -79,7 +82,7 @@ defmodule Population.Types do
 
       @type rank_with_offset :: %{
         dob: String.t,
-        sex: gender,
+        sex: wgender,
         country: country,
         rank: integer,
         offset: String.t
@@ -87,7 +90,7 @@ defmodule Population.Types do
 
       @type date_by_rank :: %{
         dob: String.t,
-        sex: gender,
+        sex: wgender,
         country: country,
         rank: integer,
         date_on_rank: String.t

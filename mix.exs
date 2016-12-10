@@ -30,7 +30,8 @@ defmodule Population.Mixfile do
   defp deps do
     [
       {:httpoison, "~> 0.10.0"},
-      {:json, "~> 1.0"}
+      {:json, "~> 1.0"},
+      {:dialyxir, "~> 0.4", only: [:dev], runtime: false}
     ]
   end
 end
