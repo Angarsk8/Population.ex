@@ -7,7 +7,10 @@ defmodule Population.Mixfile do
      elixir: "~> 1.3",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
-     deps: deps()]
+     deps: deps(),
+     name: "Population",
+     source_url: "https://github.com/Angarsk8/population.ex",
+     docs: [main: "Population"]]
   end
 
   # Configuration for the OTP application
@@ -31,7 +34,8 @@ defmodule Population.Mixfile do
     [
       {:httpoison, "~> 0.10.0"},
       {:json, "~> 1.0"},
-      {:dialyxir, "~> 0.4", only: [:dev], runtime: false}
+      {:dialyxir, "~> 0.4", only: [:dev], runtime: false},
+      {:ex_doc, "~> 0.14", only: :dev}
     ]
   end
 end
