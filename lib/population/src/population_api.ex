@@ -5,7 +5,7 @@ defmodule Population.API do
   the [population.io](http://population.io) REST API.
   """
 
-  @api_url Application.get_env(:population, :api_url)
+  @api_url "http://api.population.io/1.0/"
 
   @type state    :: map() | [String.t | map()]
   @type response :: map() | [map()]

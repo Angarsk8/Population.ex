@@ -11,9 +11,6 @@ use Mix.Config
 # You can configure for your application as:
 #
 #     config :population, key: :value
-
-config :population, api_url: "http://api.population.io/1.0/"
-
 #
 # And access this configuration in your application as:
 #
