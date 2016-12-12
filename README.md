@@ -4,7 +4,7 @@ Elixir OTP application library for the [World Population API](http://api.populat
 
 ## Public API
 
-See the full online documentation [here](https://hexdocs.pm/population/Population.html#summary).
+See the full online documentation [here](https://hexdocs.pm/population/Population.html).
 
 ### Countries: list available countries
 

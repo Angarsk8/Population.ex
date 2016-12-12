@@ -2,7 +2,7 @@ defmodule Population.Mixfile do
   use Mix.Project
 
   @description """
-    Elixir OTP application library for the [World Population API](http://api.population.io/)
+    Elixir OTP application library for the World Population API (api.population.io)
   """
 
   def project do
