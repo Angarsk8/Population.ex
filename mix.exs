@@ -1,6 +1,10 @@
 defmodule Population.Mixfile do
   use Mix.Project
 
+  @description """
+    Elixir OTP application library for the [World Population API](http://api.population.io/)
+  """
+
   def project do
     [app: :population,
      version: "0.1.0",
@@ -8,11 +12,11 @@ defmodule Population.Mixfile do
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      name: "Population",
-     source_url: "https://github.com/Angarsk8/population.ex",
-     description: description(),
+     description: @description,
      docs: [main: "Population"],
      package: package(),
-     deps: deps()]
+     deps: deps(),
+     source_url: "https://github.com/Angarsk8/population.ex"]
   end
 
   def application do
@@ -36,19 +40,9 @@ defmodule Population.Mixfile do
     ]
   end
 
-  defp description do
-    """
-    Elixir OTP application library for the [World Population API](http://api.population.io/)
-    """
-  end
-
   defp package do
-    [
-     name: :population,
-     files: ["lib", "priv", "mix.exs", "README*", "readme*", "LICENSE*", "license*"],
-     maintainers: ["Andrés García"],
-     licenses: ["MIT"],
-     links: %{"GitHub" => "https://github.com/Angarsk8/population.ex",
-              "Docs" => "https://hexdocs.pm/population/api-reference.html"}]
+    [ maintainers: ["Andrés García"],
+      licenses: ["MIT"],
+      links: %{"Github" => "https://github.com/Angarsk8/population.ex"} ]
   end
 end
