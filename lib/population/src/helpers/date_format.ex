@@ -4,13 +4,6 @@ defmodule Population.Helpers.DateFormat do
   This module defines some helper functions to format `Date` related data.
   """
 
-  @type year    :: integer
-  @type month   :: 0..12
-  @type day     :: 0..31
-  @type offset  :: {year, month, day}
-                 | {year, month}
-                 | {year}
-
   @doc """
   Converts a given offset of the form `{year, month, day}`, `{year, month}` or
   `{year}` to a string in the form `"\#{year}y\#{month}m\#{day}d"`,
@@ -25,7 +18,7 @@ defmodule Population.Helpers.DateFormat do
       "2y"
 
   """
-  @spec format_date_offset(offset) :: String.t
+  @spec format_date_offset(Population.Types.offset) :: String.t
   def format_date_offset({year, month, day}), do: "#{year}y#{month}m#{day}d"
   def format_date_offset({year, month}), do: "#{year}y#{month}m"
   def format_date_offset({year}), do: "#{year}y"
