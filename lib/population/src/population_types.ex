@@ -1,4 +1,6 @@
-defmodule Population.CommonTypes do
+defmodule Population.Types do
+
+  @moduledoc false
 
   @type failure :: {:error, String.t}
   @type gender  :: :male | :female

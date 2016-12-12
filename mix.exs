@@ -7,29 +7,26 @@ defmodule Population.Mixfile do
      elixir: "~> 1.3",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
-     deps: deps(),
      name: "Population",
      source_url: "https://github.com/Angarsk8/population.ex",
-     docs: [main: "Population"]]
+     description: description(),
+     docs: [main: "Population"],
+     package: package(),
+     deps: deps()]
   end
 
-  # Configuration for the OTP application
-  #
-  # Type "mix help compile.app" for more information
   def application do
     [applications: [:logger, :httpoison],
-     mod: {Population, []}]
+     mod: {Population, []},
+     registered: [
+        Population.Country,
+        Population.LifeExpectancy,
+        Population.Mortality,
+        Population.Rank,
+        Population.Table
+      ]]
   end
 
-  # Dependencies can be Hex packages:
-  #
-  #   {:mydep, "~> 0.3.0"}
-  #
-  # Or git/path repositories:
-  #
-  #   {:mydep, git: "https://github.com/elixir-lang/mydep.git", tag: "0.1.0"}
-  #
-  # Type "mix help deps" for more examples and options
   defp deps do
     [
       {:httpoison, "~> 0.10.0"},
@@ -37,5 +34,21 @@ defmodule Population.Mixfile do
       {:dialyxir, "~> 0.4", only: [:dev], runtime: false},
       {:ex_doc, "~> 0.14", only: :dev}
     ]
+  end
+
+  defp description do
+    """
+    Elixir OTP application library for the [World Population API](http://api.population.io/)
+    """
+  end
+
+  defp package do
+    [
+     name: :population,
+     files: ["lib", "priv", "mix.exs", "README*", "readme*", "LICENSE*", "license*"],
+     maintainers: ["Andrés García"],
+     licenses: ["MIT"],
+     links: %{"GitHub" => "https://github.com/Angarsk8/population.ex",
+              "Docs" => "https://hexdocs.pm/population/api-reference.html"}]
   end
 end

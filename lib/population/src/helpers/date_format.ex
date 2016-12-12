@@ -4,7 +4,12 @@ defmodule Population.Helpers.DateFormat do
   This module defines some helper functions to format `Date` related data.
   """
 
-  @type offset  :: Population.CommonTypes.offset
+  @type year    :: integer
+  @type month   :: 0..12
+  @type day     :: 0..31
+  @type offset  :: {year, month, day}
+                 | {year, month}
+                 | {year}
 
   @doc """
   Converts a given offset of the form `{year, month, day}`, `{year, month}` or

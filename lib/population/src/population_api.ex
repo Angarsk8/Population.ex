@@ -13,8 +13,7 @@ defmodule Population.API do
   @type failure  :: {:error, String.t}
 
   @doc """
-  Fetches the data from the [population.io](http://population.io) API given a URL `path` and handles the
-  result.
+  Fetches the data from the [population.io](http://population.io) API given a URL `path` and handles the result.
 
   Returns `{:ok, response}` if the call succeed, otherwise `{:error, reason}`.
 
