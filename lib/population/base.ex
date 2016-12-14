@@ -462,7 +462,7 @@ defmodule Population.Base do
       """
       @spec rank_in_past!(Date.t, gender, String.t, offset) :: rank_with_offset | no_return
       def rank_in_past!(dob, gender, country, ago) do
-        Population.Rank.in_past(dob, gender, country, ago)
+        Population.Rank.in_past!(dob, gender, country, ago)
       end
 
       @doc """
