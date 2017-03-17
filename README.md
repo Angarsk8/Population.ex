@@ -58,16 +58,16 @@ See the full online documentation [here](https://hexdocs.pm/population/Populatio
 
   1. Add `population` to your list of dependencies in `mix.exs`:
 
-    ```elixir
-    def deps do
-      [{:population, "~> 0.1.0"}]
-    end
-    ```
+```elixir
+def deps do
+  [{:population, "~> 0.1.0"}]
+end
+```
 
   2. Ensure `population` is started before your application:
 
-    ```elixir
-    def application do
-      [applications: [:population]]
-    end
-    ```
+```elixir
+def application do
+  [applications: [:population]]
+end
+```
